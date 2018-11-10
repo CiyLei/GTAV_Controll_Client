@@ -7,15 +7,17 @@
 //
 
 import UIKit
+import MMDrawerController
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
+    var drawercontroller:Hdrawercontroller?
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
+        buildUserInterface()
         return true
     }
 
@@ -41,6 +43,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
 
-
+    func buildUserInterface(){
+        let mainstory = UIStoryboard(name: "Main", bundle: nil)
+        let main = mainstory.instantiateViewController(withIdentifier: "ViewController") as! ViewController
+        let menu = mainstory.instantiateViewController(withIdentifier: "MenuController") as! MenuController
+        let main_nav = UINavigationController(rootViewController: main)
+        let menu_nav = UINavigationController(rootViewController: menu)
+        drawercontroller = Hdrawercontroller(center: main_nav, leftDrawerViewController: menu_nav)
+        drawercontroller?.openDrawerGestureModeMask = .all
+        drawercontroller?.closeDrawerGestureModeMask = .panningCenterView
+        drawercontroller?.setDrawerVisualStateBlock({ (drawcontroller, side, ppnum_t) -> Void in
+            return
+        })
+        self.window?.rootViewController = drawercontroller
+    }
 }
 
